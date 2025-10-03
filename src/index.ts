@@ -1,10 +1,9 @@
-import Fastify from "fastify";
-import { MercadoPagoConfig, Preference } from "mercadopago";
-import { Item } from "./item";
 import * as dotenv from "dotenv";
-import { createPrefence } from "./integracao-mercado-pago";
+import Fastify from "fastify";
 import fastifyRawBody from "fastify-raw-body";
-import crypto from "crypto";
+import { MercadoPagoConfig } from "mercadopago";
+import { createPrefence } from "./integracao-mercado-pago";
+import { Item } from "./item";
 
 dotenv.config();
 
