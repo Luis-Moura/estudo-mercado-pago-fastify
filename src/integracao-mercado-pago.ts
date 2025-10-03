@@ -1,17 +1,9 @@
 import { MercadoPagoConfig, Preference } from "mercadopago";
-import * as dotenv from "dotenv";
+import { envConfig } from "./env-config";
 import { Item } from "./item";
 
-dotenv.config();
-
-const accessToken = process.env.MP_ACCESS_TOKEN;
-
-if (!accessToken) {
-	throw new Error("MP_ACCESS_TOKEN is not defined in environment variables");
-}
-
 const client = new MercadoPagoConfig({
-	accessToken,
+	accessToken: envConfig.mp_access_token!,
 });
 
 const preference = new Preference(client);
