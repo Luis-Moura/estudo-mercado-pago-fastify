@@ -6,6 +6,10 @@ import { createPrefence } from "./integracao-mercado-pago";
 
 dotenv.config();
 
+if (!process.env.PORT) {
+	throw new Error("PORT is not defined in environment variables");
+}
+
 const accessToken = process.env.MP_ACCESS_TOKEN;
 
 if (!accessToken) {
@@ -30,7 +34,10 @@ app.get("/pagamento-aprovado", async (request, reply) => {
 	return reply.send("Pagamento aprovado com sucesso!");
 });
 
-app.listen({ port: 3000 }, (err, address) => {
-	if (err) throw err;
-	console.log(`🚀 Server listening on ${address}`);
-});
+app.listen(
+	{ port: parseInt(process.env.PORT!) || 3000, host: "0.0.0.0" },
+	(err, address) => {
+		if (err) throw err;
+		console.log(`🚀 Server listening on ${address}`);
+	}
+);
