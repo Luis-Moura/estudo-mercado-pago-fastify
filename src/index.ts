@@ -3,11 +3,21 @@ import { MercadoPagoConfig, Preference } from "mercadopago";
 import { Item } from "./item";
 import * as dotenv from "dotenv";
 import { createPrefence } from "./integracao-mercado-pago";
+import fastifyRawBody from "fastify-raw-body";
+import crypto from "crypto";
 
 dotenv.config();
 
-if (!process.env.PORT) {
+const port = process.env.PORT;
+
+const webhookSecret = process.env.MP_WEBHOOK_SECRET;
+
+if (!port) {
 	throw new Error("PORT is not defined in environment variables");
+}
+
+if (!webhookSecret) {
+	throw new Error("MP_WEBHOOK_SECRET is not defined in environment variables");
 }
 
 const accessToken = process.env.MP_ACCESS_TOKEN;
@@ -22,6 +32,13 @@ const client = new MercadoPagoConfig({
 
 const app = Fastify();
 
+app.register(fastifyRawBody, {
+	field: "rawBody",
+	global: false,
+	encoding: "utf8",
+	runFirst: true,
+});
+
 app.post("/create_preference", async (request, reply) => {
 	const { items } = request.body as { items: Item[] };
 
@@ -30,12 +47,20 @@ app.post("/create_preference", async (request, reply) => {
 	return reply.send(response);
 });
 
+app.post("/webhook", async (request, reply) => {
+	console.log("Webhook recebido!");
+	console.log("Headers:", request.headers);
+	console.log("Body:", request.body);
+
+	return reply.status(200).send("OK");
+});
+
 app.get("/pagamento-aprovado", async (request, reply) => {
 	return reply.send("Pagamento aprovado com sucesso!");
 });
 
 app.listen(
-	{ port: parseInt(process.env.PORT!) || 3000, host: "0.0.0.0" },
+	{ port: parseInt(port) || 3000, host: "0.0.0.0" },
 	(err, address) => {
 		if (err) throw err;
 		console.log(`🚀 Server listening on ${address}`);
