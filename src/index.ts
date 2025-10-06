@@ -13,6 +13,18 @@ app.register(fastifyRawBody, {
 	runFirst: true,
 });
 
+app.get("/success", async (request, reply) => {
+	return reply.send("Pagamento aprovado com sucesso!");
+});
+
+app.get("/failure", async (request, reply) => {
+	return reply.send("Pagamento falhou. Tente novamente.");
+});
+
+app.get("/pending", async (request, reply) => {
+	return reply.send("Pagamento pendente. Aguardando confirmação.");
+});
+
 app.post("/create_preference", async (request, reply) => {
 	const { items } = request.body as { items: Item[] };
 
