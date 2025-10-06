@@ -22,9 +22,9 @@ export const createPrefence = async (items: Item[]) => {
 			body: {
 				items: normalizedItems,
 				back_urls: {
-					success: "http://localhost:3000/success",
-					failure: "http://localhost:3000/failure",
-					pending: "http://localhost:3000/pending",
+					success: `${envConfig.base_url}/success`,
+					failure: `${envConfig.base_url}/failure`,
+					pending: `${envConfig.base_url}/pending`,
 				},
 				auto_return: "approved",
 			},
