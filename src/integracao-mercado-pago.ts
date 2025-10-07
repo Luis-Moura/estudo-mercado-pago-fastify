@@ -27,6 +27,7 @@ export const createPrefence = async (items: Item[]) => {
 					pending: `${envConfig.base_url}/pending`,
 				},
 				auto_return: "approved",
+				notification_url: `${envConfig.base_url}/webhook`,
 			},
 		});
 
